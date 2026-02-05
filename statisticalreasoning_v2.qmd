@@ -39,7 +39,7 @@ Number of total iterations per chain (including warmup; defaults to 2000).
 
 ### Q1.4
 
-I think higher variability would be associated with larger crabs.
+I think higher variability would be associated with larger crabs. Because larger crab might have more tolerant to temperature changes.
 
 ### Q1.5
 
@@ -87,7 +87,7 @@ plot(m.crab.watersd)
 summary(m.crab.watersd)
 ```
 
-The model ran correctly. Because, posterior samples have smooth distribution with one clean peak and four chains on the overlapping each other and flat.
+The model ran correctly. Because, Rhat is 1, posterior samples have smooth distribution with one clean peak and four chains on the overlapping each other and flat.
 
 ### Q1.9
 
@@ -97,7 +97,7 @@ The model ran correctly. Because, posterior samples have smooth distribution wit
 
 Estimate for water temp sd is 0.1. Every 1 degree water temperature sd, carapace width increases by 0.1mm.
 
-The slope estimate ranges from -0.21 to 0.41 which include 0. Therefore, the effect isn't reasonably different from zero. Because a slope of zero is compatible with the data, we can say that predictor has any effect on our response.
+The 95% credible interval ranges from -0.21 to 0.41 which include 0. Therefore, the effect isn't reasonably different from zero and we can say that predictor doesn't have effect on our response.
 
 # Back to pikas!
 
@@ -122,7 +122,7 @@ Does day of year correlated with stress?
 
 ### Q2.2
 
-Later of year would be more stressful. Larger value of the predictor with more stressed pika.
+Larger value of the predictor with more stressed pika. Because later of year could be more stressful due to reduction in amount of food as fall coming.
 
 ### Q2.3
 
@@ -181,4 +181,4 @@ plot(confm.pikas.yod, show_data = TRUE)
 
 ### Q2.8
 
-In conclusion we found that for every day of the year, the concentration of glucocorticoid metabolite decreased by 59.06 pg/g. Meaning as the summer progresses toward fall and winter, pika stress decreases.
+In conclusion, we found that for every day of the year, the concentration of glucocorticoid metabolite decreased by 59.06 pg/g. Meaning as the summer progresses toward fall and winter, pika stress decreases.
