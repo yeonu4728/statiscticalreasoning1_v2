@@ -1,0 +1,59 @@
+---
+title: "statisticalreasoning_v2"
+author: "Yeonu&Sam"
+format: pdf
+editor: visual
+---
+
+```{r}
+library(brms) # for statistics
+library(tidyverse)
+library(ggeffects) # for the prediction plot
+library(lterdatasampler) # for built-in datasets
+```
+
+### Q1.1
+
+It looks like size increases with latitude. I'm not confident with it.
+
+### Q1.2
+
+```{r}
+pie_crab %>% 
+  ggplot(aes(x = latitude, y = size)) +
+  geom_point() +
+  # Make the y-axis include 0
+  ylim(0, NA)+
+  geom_smooth()
+```
+
+### Q1.3
+
+iter=
+
+Number of total iterations per chain (including warmup; defaults to 2000).
+
+```{r}
+?brm
+```
+
+### Q1.4
+
+I think higher variability would be associated with larger crabs.
+
+### Q1.5
+
+```{r}
+pie_crab %>% 
+  ggplot(aes(x = water_temp_sd, y = size)) +
+  geom_point() +
+  # Make the y-axis include 0
+  ylim(0, NA)+
+  geom_smooth()
+```
+
+### Q1.6
+
+It looks like size doesn't change with the sd of water temperature. I'm decently confident with it.
+
+### Q1.7
