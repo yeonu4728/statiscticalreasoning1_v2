@@ -57,3 +57,128 @@ pie_crab %>%
 It looks like size doesn't change with the sd of water temperature. I'm decently confident with it.
 
 ### Q1.7
+
+```{r}
+# water temp sd model
+m.crab.watersd <- 
+  brm(data = pie_crab, # Give the model the pie_crab data
+      # Choose a gaussian (normal) distribution
+      family = gaussian,
+      # Specify the model here. 
+      size ~ water_temp_sd,
+      # Here's where you specify parameters for executing the Markov chains
+      # We're using similar to the defaults, except we set cores to 4 so the analysis runs faster than the default of 1
+      iter = 4000, warmup = 1000, chains = 4, cores = 4,
+      # Setting the "seed" determines which random numbers will get sampled.
+      # In this case, it makes the randomness of the Markov chain runs reproducible 
+      # (so that both of us get the exact same results when running the model)
+      seed = 4,
+      # Save the fitted model object as output - helpful for reloading in the output later
+      file = "output/m.crab.watersd")
+```
+
+### Q1.8
+
+```{r}
+# show posteriors and chains
+plot(m.crab.watersd) 
+
+# show summary, including rhat
+summary(m.crab.watersd)
+```
+
+The model ran correctly. Because, posterior samples have smooth distribution with one clean peak and four chains on the overlapping each other and flat.
+
+### Q1.9
+
+```{r}
+?pie_crab
+```
+
+Estimate for water temp sd is 0.1. Every 1 degree water temperature sd, carapace width increases by 0.1mm.
+
+The slope estimate ranges from -0.21 to 0.41 which include 0. Therefore, the effect isn't reasonably different from zero. Because a slope of zero is compatible with the data, we can say that predictor has any effect on our response.
+
+# Back to pikas!
+
+```{r}
+head(nwt_pikas)
+```
+
+```{r}
+nwt_pikas_doy <- nwt_pikas %>% 
+  # Add a new column called day_of_year
+  # yday extracts the day of year from the date column
+  mutate(day_of_year = yday(date)) %>% 
+  # relocate the day_of_year column after the date column
+  relocate(day_of_year, .after = date)
+
+head(nwt_pikas_doy)
+```
+
+### Q2.1
+
+Does day of year correlated with stress?
+
+### Q2.2
+
+Later of year would be more stressful. Larger value of the predictor with more stressed pika.
+
+### Q2.3
+
+```{r}
+nwt_pikas_doy %>% 
+  ggplot(aes(x = day_of_year, y =concentration_pg_g )) +
+  geom_point()+
+  geom_smooth()
+```
+
+### Q2.4
+
+```{r}
+m.pikas.yod <- 
+  brm(data = nwt_pikas_doy, # Give the model the pie_crab data
+      # Choose a gaussian (normal) distribution
+      family = gaussian,
+      # Specify the model here. 
+      concentration_pg_g ~ day_of_year,
+      # Here's where you specify parameters for executing the Markov chains
+      # We're using similar to the defaults, except we set cores to 4 so the analysis runs faster than the default of 1
+      iter = 2000, warmup = 1000, chains = 4, cores = 4,
+      # Setting the "seed" determines which random numbers will get sampled.
+      # In this case, it makes the randomness of the Markov chain runs reproducible 
+      # (so that both of us get the exact same results when running the model)
+      seed = 4,
+      # Save the fitted model object as output - helpful for reloading in the output later
+      file = "output/m.pikas.yod")
+```
+
+### Q2.5
+
+```{r}
+# show posteriors and chains
+plot(m.pikas.yod) 
+
+# show summary, including rhat
+summary(m.pikas.yod)
+```
+
+Rhat is 1.0 which is good! Posterior samples have smooth distribution with one clean peak and four chains on the overlapping each other and flat which is good, too!
+
+### Q2.6
+
+Estimate for year of day is -59.06. Every 1 year of day, GCM concentration in dry pika feces decreases by 59.06 concentration in picogram.
+
+The slope estimate ranges from -77.57 to -40.48 which not include 0. Therefore, the effect is reasonably different from zero. We can say that predictor has effect on our response.
+
+### Q2.7
+
+```{r}
+# compatibility interval. the shows uncertainty in the average response.
+confm.pikas.yod <- predict_response(m.pikas.yod)
+plot(confm.pikas.yod, show_data = TRUE)
+```
+
+### Q2.8
+
+In conclusion we found that for every day of the year, the concentration of glucocorticoid metabolite decreased by 59.06 pg/g. Meaning as the summer progresses toward fall and winter, pika stress decreases.
